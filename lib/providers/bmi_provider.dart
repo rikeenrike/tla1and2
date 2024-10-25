@@ -1,22 +1,17 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../services/bmi_service.dart';
 
-// Define a provider for BMIService
-final bmiServiceProvider = Provider((ref) => BMIService());
+class BMIProvider extends ChangeNotifier {
+  final BMIService _bmiService = BMIService();
+  double? _bmi;
 
-// StateNotifier to manage BMI calculations
-class BMIStateNotifier extends StateNotifier<double?> {
-  final BMIService _bmiService;
-
-  BMIStateNotifier(this._bmiService) : super(null);
+  double? get bmi => _bmi;
 
   void calculate(double height, double weight) {
-    state = _bmiService.calculateBMI(height, weight);
+    _bmi = _bmiService.calculateBMI(height, weight);
+    notifyListeners();
   }
 }
 
-// Provider to access BMIStateNotifier
-final bmiProvider = StateNotifierProvider<BMIStateNotifier, double?>((ref) {
-  final bmiService = ref.read(bmiServiceProvider);
-  return BMIStateNotifier(bmiService);
-});
+final bmiProvider = ChangeNotifierProvider((ref) => BMIProvider());

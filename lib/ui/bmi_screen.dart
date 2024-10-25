@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import '../providers/bmi_provider.dart';
+import 'package:tla1and2/providers/bmi_provider.dart';
 
 class BMIScreen extends ConsumerWidget {
   final _heightController = TextEditingController();
@@ -43,15 +43,15 @@ class BMIScreen extends ConsumerWidget {
                 final weight = double.tryParse(_weightController.text);
 
                 if (height != null && weight != null) {
-                  ref.read(bmiProvider.notifier).calculate(height, weight);
+                  ref.read(bmi as ProviderListenable).calculate(height, weight);
                 }
               },
               child: Text("Calculate BMI"),
             ),
             SizedBox(height: 20),
-            if (bmi != null)
+            if (bmi.bmi != null)
               Text(
-                'Your BMI: ${bmi.toStringAsFixed(2)}',
+                'Your BMI: ${bmi.bmi!.toStringAsFixed(2)}',
                 style: TextStyle(fontSize: 24),
               ),
           ],
